@@ -1,6 +1,8 @@
 ## Usage
 
 ```javascript
+import { Rover, RoverDelegate } from 'react-native-rover';
+
 // To interact with a Rover collector you provide a RoverDelegate. A minimal
 // delegate would know when the collection is finished (either successfully or
 // as a result of an error) and be able to process any receipts collected.
@@ -46,7 +48,7 @@ Rover.configure({
 // Rover.collect() with the desired merchant id, the date back to
 // which Rover should collect from, and your delegate instance
 // to collect the results with
-let date = Date(timeIntervalSinceNow: -60*60*24*365*1)
+let date = new Date('2023-01-01T00:00:00Z');
 
 // 1. Create a new connection to a merchant
 // userId: [optional] identifier you provide and passed through by Rover
@@ -92,8 +94,13 @@ Rover.collect({
 
 // 4. Remove a connection
 Rover.remove({
-	
-}) { }
+	account: connection.account,
+	merchantId: connection.merchantId
+}).then(function() {
+    
+}).catch(function(error) {
+    
+});
 
 ```
 
