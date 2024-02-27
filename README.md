@@ -10,7 +10,7 @@ import { Rover, RoverDelegate } from 'react-native-rover';
 // IMPORTANT NOTE: Some delegate methods provide a callback. Collection will not continue
 // until the callback is made.
 class MyRoverDelegate extends RoverDelegate {
-	roverDidFinish(
+    roverDidFinish(
         sessionUUID: string, 
         error?: string, 
         userError?: string, 
@@ -94,8 +94,8 @@ Rover.collect({
 
 // 4. Remove a connection
 Rover.remove({
-	account: connection.account,
-	merchantId: connection.merchantId
+    account: connection.account,
+    merchantId: connection.merchantId
 }).then(function() {
     
 }).catch(function(error) {
@@ -115,4 +115,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.1.5
+Latest version: v0.1.6
