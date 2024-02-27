@@ -1,6 +1,6 @@
 {
   "name": "react-native-rover",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "React native wrapper for Rover (https://github.com/SmallPlanet/RoveriOS)",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -41,14 +41,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SmallPlanet/react-native-rover.git"
+    "url": "git+https://github.com/SmallPlanet/RoverReactNative.git"
   },
   "author": "Rocco Bowling <rocco.bowling@smallplanet.com> (https://github.com/SmallPlanet)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SmallPlanet/react-native-rover/issues"
+    "url": "https://github.com/SmallPlanet/RoverReactNative/issues"
   },
-  "homepage": "https://github.com/SmallPlanet/react-native-rover#readme",
+  "homepage": "https://github.com/SmallPlanet/RoverReactNative#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

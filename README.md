@@ -115,4 +115,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.1.4
+Latest version: v0.1.5
