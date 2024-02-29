@@ -1,6 +1,6 @@
 {
   "name": "react-native-rover",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "React native wrapper for Rover (https://github.com/SmallPlanet/RoveriOS)",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -149,7 +149,13 @@
     "output": "lib",
     "targets": [
       "commonjs",
-      "module"
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
     ]
   }
 }
