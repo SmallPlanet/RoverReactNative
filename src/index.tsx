@@ -1,5 +1,7 @@
 import { NativeModules, Platform } from 'react-native';
+
 import type { Merchant, Connection, Receipt } from './Receipt'
+export type { Merchant, Connection, Receipt }
 
 const LINKING_ERROR =
 `The package 'react-native-rover' doesn't seem to be linked. Make sure: \n\n` +

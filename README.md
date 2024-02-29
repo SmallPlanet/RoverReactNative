@@ -2,6 +2,7 @@
 
 ```javascript
 import { Rover, RoverDelegate } from 'react-native-rover';
+import type { Merchant, Connection, Receipt } from 'react-native-rover';
 
 // To interact with a Rover collector you provide a RoverDelegate. A minimal
 // delegate would know when the collection is finished (either successfully or
@@ -20,7 +21,7 @@ class MyRoverDelegate extends RoverDelegate {
     }
     roverDidCollect(
         sessionUUID: string,
-        receipts: Array<object>
+        receipts: Array<Receipt>
     ) {
         
     }
@@ -115,4 +116,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.1.9
+Latest version: v0.1.10
