@@ -1,0 +1,97 @@
+export interface Connection {
+    merchantId: number
+    account: string
+    password?: string
+    cookiesBase64?: string
+    fromDate?: Date
+    appInfo?: string
+    userInteractionRequired: boolean
+}
+
+export interface Merchant {
+    merchantId: number
+    name: string
+    category?: string
+    subcategory?: string
+    version: number
+    logoLight?: string
+    logoDark?: string
+}
+
+export interface ReceiptFee {
+    price?: string
+    name?: string
+}
+
+export interface ReceiptAddress {
+    name?: string
+    address1?: string
+    address2?: string
+    city?: string
+    state?: string
+    zip?: string
+}
+
+export interface ReceiptItem {
+    title?: string
+    titleOther?: Array<String>
+    titleAuthors?: Array<String>
+    quantity?: string
+    weight?: string
+    asin?: string
+    imageUrl?: string
+    productUrl?: string
+    condition?: string
+    soldBy?: string
+    deliveryStatus?: string
+    itemIndex?: string
+    itemId?: string
+    upc?: string
+    brand?: string
+    category?: string
+    manufacturer?: string
+    originalUnitPrice?: string
+    unitPrice?: string
+    totalPrice?: string
+    notAvailable?: string
+    substitution?: string
+    substitutionPrice?: string
+    color?: string
+    size?: string
+    type?: string
+    trackingId?: string
+}
+
+export interface Receipt {
+    duplicationId?: string
+    receiptId?: string
+    receiptDomain?: string
+    error?: string
+    validationError?: string
+    storeName?: string
+    contentStoreName?: string
+    serviceGroup?: string
+    collectedDate?: Date
+    purchasedDate?: Date
+    continuationDate?: Date
+    membershipInfo?: string
+    orderUrl?: string
+    additionalOrderUrl?: string
+    fees?: Array<ReceiptFee>
+    tax?: string
+    total?: string
+    totalWithoutTax?: string
+    deliveryCharge?: string
+    discounts?: string
+    giftCards?: string
+    currency?: string
+    paymentMethod?: string
+    paymentChannel?: string
+    shippingAddress?: ReceiptAddress
+    merchantAddress?: ReceiptAddress
+    items: Array<ReceiptItem>
+    sourceData?: string
+    clientInfo?: string
+    auxData?: string
+    merchantLocalPurchaseDate?: Date
+}
