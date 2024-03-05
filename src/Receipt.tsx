@@ -1,3 +1,17 @@
+
+// Codable Request/Reponse structures for communicating from the facade to RoverCore. RoveriOS and RoverServer can
+// use these verbatim, but we use https://github.com/KittyMac/Transom to autotranslate to Kotlin data classes
+// for RoverAndroid. Please keep the complexity of this file to a minimum, and if you encounter any compile
+// errors report them to Rocco.
+
+
+
+
+
+
+
+
+
 export interface Connection {
     merchantId: number
     account: string
@@ -13,11 +27,15 @@ export interface Merchant {
     name: string
     category?: string
     subcategory?: string
+    locales?: string
     version: number
     logoLight?: string
     logoDark?: string
 }
 
+// MARK: - ScrapeStatus
+// MARK: ScrapeRequest
+// MARK: - Receipt
 export interface ReceiptFee {
     price?: string
     name?: string
