@@ -19,6 +19,7 @@ export interface Connection {
     cookiesBase64?: string
     fromDate?: Date
     appInfo?: string
+    featureFlags?: Array<String>
     userInteractionRequired: boolean
 }
 
