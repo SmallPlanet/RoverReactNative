@@ -32,6 +32,7 @@ class RoverModule(private val reactContext: ReactApplicationContext) :
   private var delegates: HashMap<String, JSRoverDelegate> = hashMapOf()
   private var nextEventPromise: Promise? = null
 
+  private var pendingSend = mutableListOf<String>()
   private var pendingResults: HashMap<String, ((String?, String?) -> Unit)> = hashMapOf()
 
   fun remove(delegateUUID: String) {
@@ -44,17 +45,24 @@ class RoverModule(private val reactContext: ReactApplicationContext) :
     if (delegates[delegateUUID] == null) {
       return returnCallback(null, "delegateUUID $delegateUUID does not exist")
     }
-    val nextEventPromise = nextEventPromise ?:
-    return returnCallback(null, "delegate method wants to be called but nextEventResolveBlock is nil")
-
-    this.nextEventPromise = null
 
     pendingResults[delegateUUID] = returnCallback
 
-    nextEventPromise.resolve(argsJson)
+    pendingSend.add(argsJson)
+
+    checkSendQueue()
   }
 
   // MARK: - INTERNAL
+
+  fun checkSendQueue() {
+    if (pendingSend.isEmpty() == false) else { return }
+    val nextEventPromise = nextEventPromise ?: return
+
+    this.nextEventPromise = null
+
+    nextEventPromise.resolve(pendingSend.removeFirst())
+  }
 
   @ReactMethod
   fun uuidv4(successCallback: Callback) {
@@ -78,6 +86,8 @@ class RoverModule(private val reactContext: ReactApplicationContext) :
     promise:  Promise
   ) {
     nextEventPromise = promise
+
+    checkSendQueue()
   }
 
   // MARK: - PUBLIC

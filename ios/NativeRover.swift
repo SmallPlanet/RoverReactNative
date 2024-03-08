@@ -10,6 +10,7 @@ class NativeRover: NSObject {
     private var nextEventResolveBlock: RCTPromiseResolveBlock?
     private var nextEventRejectBlock: RCTPromiseRejectBlock?
     
+    private var pendingSend: [String] = []
     private var pendingResults: [String: (String?, String?) -> ()] = [:]
     
     func remove(delegateUUID: String) {
@@ -22,19 +23,25 @@ class NativeRover: NSObject {
         guard let _ = delegates[delegateUUID] else {
             return returnCallback(nil, "delegateUUID \(delegateUUID) does not exist")
         }
-        guard let nextEventResolveBlock = nextEventResolveBlock else {
-            return returnCallback(nil, "delegate method wants to be called but nextEventResolveBlock is nil")
-        }
+        
+        pendingResults[delegateUUID] = returnCallback
+        
+        pendingSend.append(argsJson)
+        
+        checkSendQueue()
+    }
+    
+    // MARK: - INTERNAL
+    
+    func checkSendQueue() {
+        guard pendingSend.isEmpty == false else { return }
+        guard let nextEventResolveBlock = nextEventResolveBlock else { return }
         
         self.nextEventResolveBlock = nil
         self.nextEventRejectBlock = nil
         
-        pendingResults[delegateUUID] = returnCallback
-        
-        nextEventResolveBlock(argsJson)
+        nextEventResolveBlock(pendingSend.removeFirst())
     }
-    
-    // MARK: - INTERNAL
     
     @objc(uuidv4:)
     func uuidv4(response: @escaping RCTResponseSenderBlock) {
@@ -62,6 +69,8 @@ class NativeRover: NSObject {
     ) {
         nextEventResolveBlock = resolve
         nextEventRejectBlock = reject
+        
+        checkSendQueue()
     }
         
     // MARK: - PUBLIC

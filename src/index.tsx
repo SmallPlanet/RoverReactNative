@@ -283,8 +283,6 @@ function nextEvent(eventJson?: string) {
             let delegate = delegates[delegateUUID];
 
             if (delegate != undefined && (delegate as any)[delegateFunc] != undefined) {
-                console.log("delegate has property");
-
                 switch (delegateFunc) {
                 case "roverDidFinish":
                     delegate.roverDidFinish(
