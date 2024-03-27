@@ -85,6 +85,7 @@ export interface Receipt {
     duplicationId?: string
     receiptId?: string
     receiptDomain?: string
+    receiptFormat?: string
     error?: string
     validationError?: string
     storeName?: string
