@@ -105,6 +105,9 @@ Rover.remove({
 
 ```
 
+## Android
+
+There are some additional, native-level changes required for Android intengration. Please refer to the [Rover Android repository](https://github.com/SmallPlanet/RoverAndroid) for the latest instructions.
 
 ## SDK Integration
 
@@ -116,4 +119,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.1.14
+Latest version: v0.1.15
