@@ -11,10 +11,11 @@ import com.smallplanet.roverandroid.Private.JsonAny
 import com.smallplanet.roverandroid.Private.ScrapeResponse
 import com.smallplanet.roverandroid.Rover
 import com.smallplanet.roverandroid.WebViews.RoverWebView
+import android.content.pm.PackageManager
 import java.util.Date
 import java.util.UUID
 
-class RoverModule(private val reactContext: ReactApplicationContext) :
+public class RoverModule(private val reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
   override fun getName(): String {
     return NAME
@@ -339,8 +340,13 @@ class RoverModule(private val reactContext: ReactApplicationContext) :
   companion object {
     const val NAME = "NativeRover"
 
-    fun getPackageName(): String? {
+    public fun getPackageName(): String? {
       return Rover.getPackageName()
+    }
+
+    public fun getPackageManager(appPackageName: String,
+                          appPackageManager: PackageManager): PackageManager? {
+      return Rover.getPackageManager(appPackageName, appPackageManager)
     }
   }
 }
