@@ -7,7 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
-import com.smallplanet.roverandroid.Private.JsonAny
+import com.smallplanet.roverandroid.Private.RNRJsonAny
 import com.smallplanet.roverandroid.Private.ScrapeResponse
 import com.smallplanet.roverandroid.Rover
 import com.smallplanet.roverandroid.WebViews.RoverWebView
@@ -97,7 +97,7 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
   fun featureFlags(
     promise: Promise
   ) {
-    val result = JsonAny.toJson(Rover.featureFlags) ?:
+    val result = RNRJsonAny.toJson(Rover.featureFlags) ?:
     return promise.reject("ERROR", "Failed to serialize feature flags")
     return promise.resolve(result)
   }
@@ -129,8 +129,8 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
                     var deviceId: String?,
                     var maxConcurrentCollections: Long?)
 
-    val args = JsonAny.parse(argsJson, Args::class.java) ?:
-    return promise.reject("ERROR", JsonAny.parseError(argsJson, Args::class.java))
+    val args = RNRJsonAny.parse(argsJson, Args::class.java) ?:
+    return promise.reject("ERROR", RNRJsonAny.parseError(argsJson, Args::class.java))
 
     val roverEnvironment = when(args.environment) {
       Rover.Environment.staging.rawValue -> Rover.Environment.staging
@@ -148,7 +148,7 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
       if (error != null) {
         return@callback promise.reject("ERROR", error)
       }
-      val result = JsonAny.toJson(merchants) ?:
+      val result = RNRJsonAny.toJson(merchants) ?:
       return@callback promise.reject("ERROR", "Failed to serialize merchants")
       promise.resolve(result)
     }
@@ -185,8 +185,8 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
       var overrideMimicDesktopIfPossible: Boolean?,
       var overrideWebviewBlockImageLoading: Boolean?
     )
-    val args = JsonAny.parse(argsJson, Args::class.java) ?:
-    return promise.reject("ERROR", JsonAny.parseError(argsJson, Args::class.java))
+    val args = RNRJsonAny.parse(argsJson, Args::class.java) ?:
+    return promise.reject("ERROR", RNRJsonAny.parseError(argsJson, Args::class.java))
 
     if (delegateUUID.isEmpty()) {
       return promise.reject("ERROR", "invalid delegate uuid")
@@ -241,8 +241,8 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
     data class Args(
       var sessionUUID: String
     )
-    val args = JsonAny.parse(argsJson, Args::class.java) ?:
-    return promise.reject("ERROR", JsonAny.parseError(argsJson, Args::class.java))
+    val args = RNRJsonAny.parse(argsJson, Args::class.java) ?:
+    return promise.reject("ERROR", RNRJsonAny.parseError(argsJson, Args::class.java))
 
     Rover.cancel(sessionUUID = args.sessionUUID) callback@{ error ->
       if (error != null) {
@@ -277,8 +277,8 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
       var javascriptUrl: String?,
       var javascriptVersion: Long?
     )
-    val args = JsonAny.parse(argsJson, Args::class.java) ?:
-    return promise.reject("ERROR", JsonAny.parseError(argsJson, Args::class.java))
+    val args = RNRJsonAny.parse(argsJson, Args::class.java) ?:
+    return promise.reject("ERROR", RNRJsonAny.parseError(argsJson, Args::class.java))
 
     if (delegateUUID.isEmpty()) {
       return promise.reject("ERROR", "invalid delegate uuid")
@@ -312,7 +312,7 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
     promise: Promise
   ) {
     Rover.connections callback@{ connections ->
-      val connectionsJson = JsonAny.toJson(connections) ?:
+      val connectionsJson = RNRJsonAny.toJson(connections) ?:
       return@callback promise.reject("ERROR", "Failed to serialize connections")
       return@callback promise.resolve(connectionsJson)
     }
@@ -327,8 +327,8 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
       var account: String,
       var merchantId: Long
     )
-    val args = JsonAny.parse(argsJson, Args::class.java) ?:
-    return promise.reject("ERROR", JsonAny.parseError(argsJson, Args::class.java))
+    val args = RNRJsonAny.parse(argsJson, Args::class.java) ?:
+    return promise.reject("ERROR", RNRJsonAny.parseError(argsJson, Args::class.java))
 
     Rover.remove(
       account = args.account,

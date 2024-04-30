@@ -1,7 +1,7 @@
 package com.rover
 
 import android.util.Log
-import com.smallplanet.roverandroid.Private.JsonAny
+import com.smallplanet.roverandroid.Private.RNRJsonAny
 import com.smallplanet.roverandroid.Receipt
 import com.smallplanet.roverandroid.RoverDelegate
 import com.smallplanet.roverandroid.ScrapeRequest
@@ -34,7 +34,7 @@ class JSRoverDelegate(
       userError = userError,
       verboseError = verboseError)
 
-    val argsJson = JsonAny.toJson(args) ?: return
+    val argsJson = RNRJsonAny.toJson(args) ?: return
 
     nativeRover.send(uuid, argsJson) { resultJson, resultError ->
       nativeRover.remove(delegateUUID = uuid)
@@ -58,11 +58,11 @@ class JSRoverDelegate(
       scrapeRequest = scrapeRequest
     )
 
-    val argsJson = JsonAny.toJson(args) ?:
+    val argsJson = RNRJsonAny.toJson(args) ?:
     return callback(scrapeRequest, "failed to serialize args")
 
     nativeRover.send(uuid, argsJson) callback@{ resultJson, resultError ->
-      val newScrapeRequest = JsonAny.parse(resultJson ?: "", ScrapeRequest::class.java) ?:
+      val newScrapeRequest = RNRJsonAny.parse(resultJson ?: "", ScrapeRequest::class.java) ?:
       return@callback callback(scrapeRequest, resultError)
       callback(newScrapeRequest, resultError)
     }
@@ -83,7 +83,7 @@ class JSRoverDelegate(
       receipts = receipts
     )
 
-    val argsJson = JsonAny.toJson(args) ?:  return
+    val argsJson = RNRJsonAny.toJson(args) ?:  return
 
     nativeRover.send(uuid, argsJson) { resultJson, resultError -> }
   }
@@ -122,7 +122,7 @@ class JSRoverDelegate(
       userTag = userTag
     )
 
-    val argsJson = JsonAny.toJson(args) ?:  return
+    val argsJson = RNRJsonAny.toJson(args) ?:  return
 
     nativeRover.send(uuid, argsJson) { resultJson, resultError -> }
   }
@@ -152,7 +152,7 @@ class JSRoverDelegate(
       cookiesBase64 = cookiesBase64
     )
 
-    val argsJson = JsonAny.toJson(args) ?:
+    val argsJson = RNRJsonAny.toJson(args) ?:
     return callback("failed to serialize args", null)
 
     nativeRover.send(uuid, argsJson) { resultJson, resultError ->

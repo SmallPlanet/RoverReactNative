@@ -8,7 +8,7 @@ import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 
-class JsonAny {
+class RNRJsonAny {
     companion object {
         val gson = GsonBuilder()
             .disableHtmlEscaping()
