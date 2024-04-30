@@ -83,6 +83,7 @@ export interface ReceiptItem {
 }
 
 export interface Receipt {
+    roverUserId?: string
     duplicationId?: string
     receiptId?: string
     receiptDomain?: string

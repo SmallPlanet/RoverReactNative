@@ -107,7 +107,23 @@ Rover.remove({
 
 ## Android
 
-There are some additional, native-level changes required for Android intengration. Please refer to the [Rover Android repository](https://github.com/SmallPlanet/RoverAndroid) for the latest instructions.
+```kotlin
+import com.rover.RoverModule
+
+// Create a custom subclass of Application and provide the following overrides
+class ReferenceApplication(): Application() {
+	override fun getPackageName(): String? {
+		return RoverModule.getPackageName() ?: super.getPackageName()
+	}
+	
+	override fun getPackageManager(): PackageManager {
+		return RoverModule.getPackageManager(
+			super.getPackageName(),
+			super.getPackageManager()
+		) ?: super.getPackageManager()
+	}
+}
+```
 
 ## SDK Integration
 
@@ -119,4 +135,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.1.18
+Latest version: v0.1.19
