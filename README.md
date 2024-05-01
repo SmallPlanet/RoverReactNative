@@ -107,6 +107,8 @@ Rover.remove({
 
 ## Android
 
+In your Android project, please add the following overrides to a custom subclass of Application.
+
 ```kotlin
 import com.rover.RoverModule
 
@@ -124,6 +126,14 @@ class ReferenceApplication(): Application() {
 	}
 }
 ```
+In your project ```build.gradle``` file, add the following repository:
+```
+allprojects {
+    repositories {
+        flatDir { dirs "$rootDir/../node_modules/react-native-rover/android/libs" }
+    }
+}
+```
 
 ## SDK Integration
 
@@ -135,4 +145,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.1.19
+Latest version: v0.1.20
