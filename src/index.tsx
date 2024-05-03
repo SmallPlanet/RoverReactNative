@@ -42,6 +42,9 @@ let delegates: { [key: string]: RoverDelegate } = {};
 class RoverClass {
     ROVER_STAGING = "ROVER_STAGING";
     ROVER_PRODUCTION = "ROVER_PRODUCTION";
+
+    prevConfigArgs: any = undefined;
+    isConfigured: boolean = false;
     
     featureFlags(): Promise<object> {
         return new Promise((resolve, reject) => {
@@ -83,12 +86,18 @@ class RoverClass {
         deviceId?: string
         maxConcurrentCollections?: number
     }): Promise<Array<Merchant>> {
+        let localThis = this;
+
+        this.prevConfigArgs = args;
+
         return new Promise((resolve, reject) => {
             NativeRover.configure(
                 JSON.stringify(args, dateConverter)
             ).then(function(merchantsJson: string) {
+                localThis.isConfigured = true;
                 resolve(JSON.parse(merchantsJson));
             }).catch(function(error: any) {
+                localThis.isConfigured = false;
                 reject(error);
             });
         });
@@ -152,9 +161,27 @@ class RoverClass {
         overrideMimicDesktopIfPossible?: boolean,
         overrideWebviewBlockImageLoading?: boolean
     }, delegate: RoverDelegate): Promise<object> {
+        let localThis = this;
+
         if (delegate.uuid != undefined) {
             return new Promise((_, reject) => {
                 reject("You should create a unique RoverDelegate for each call to Rover.collect()")
+            });
+        }
+
+        // Handle cases where configure() was either not called or it failed with an error
+        if (this.isConfigured == false) {
+            if (this.prevConfigArgs == undefined) {
+                return new Promise((_, reject) => {
+                    reject("Rover.configure() has not been called")
+                });
+            }
+            this.configure(this.prevConfigArgs).then(function() {
+                return localThis.collect(args, delegate);
+            }).catch(function(error: any) {
+                return new Promise((_, reject) => {
+                    reject(error);
+                });
             });
         }
 
