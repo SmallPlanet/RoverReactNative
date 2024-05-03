@@ -161,27 +161,10 @@ class RoverClass {
         overrideMimicDesktopIfPossible?: boolean,
         overrideWebviewBlockImageLoading?: boolean
     }, delegate: RoverDelegate): Promise<object> {
-        let localThis = this;
 
         if (delegate.uuid != undefined) {
             return new Promise((_, reject) => {
                 reject("You should create a unique RoverDelegate for each call to Rover.collect()")
-            });
-        }
-
-        // Handle cases where configure() was either not called or it failed with an error
-        if (this.isConfigured == false) {
-            if (this.prevConfigArgs == undefined) {
-                return new Promise((_, reject) => {
-                    reject("Rover.configure() has not been called")
-                });
-            }
-            this.configure(this.prevConfigArgs).then(function() {
-                return localThis.collect(args, delegate);
-            }).catch(function(error: any) {
-                return new Promise((_, reject) => {
-                    reject(error);
-                });
             });
         }
 
