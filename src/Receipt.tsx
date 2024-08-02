@@ -83,6 +83,7 @@ export interface ReceiptItem {
 }
 
 export interface Receipt {
+    roverMerchantId?: number
     roverUserId?: string
     roverAccountId?: string
     roverSessionUUID?: string
@@ -90,14 +91,16 @@ export interface Receipt {
     receiptId?: string
     receiptDomain?: string
     receiptFormat?: string
+    deviceLocale?: string
+    deviceTimezone?: string
     error?: string
     validationError?: string
     storeName?: string
     contentStoreName?: string
     serviceGroup?: string
-    collectedDate?: Date
-    purchasedDate?: Date
-    continuationDate?: Date
+    collectedDate?: string
+    purchasedDate?: string
+    continuationDate?: string
     membershipInfo?: string
     orderUrl?: string
     additionalOrderUrl?: string
@@ -117,5 +120,5 @@ export interface Receipt {
     sourceData?: string
     clientInfo?: string
     auxData?: string
-    merchantLocalPurchaseDate?: Date
+    merchantLocalPurchaseDate?: string
 }

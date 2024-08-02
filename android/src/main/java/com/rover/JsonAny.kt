@@ -7,12 +7,17 @@ import java.lang.Byte.decode
 import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
+import com.smallplanet.roverandroid.Rover
 
 class RNRJsonAny {
     companion object {
+        
         val gson = GsonBuilder()
             .disableHtmlEscaping()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+            .registerTypeAdapter(Date::class.java, JsonSerializer<Date>() { src, type, context ->
+                return@JsonSerializer JsonPrimitive(Rover.dateFormatter.format(src))
+            })
             .registerTypeAdapter(ByteArray::class.java, JsonSerializer<ByteArray>() { src, _, _ ->
                 return@JsonSerializer JsonPrimitive(Base64.encodeToString(src, Base64.NO_WRAP))
             })

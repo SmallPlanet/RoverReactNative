@@ -135,6 +135,15 @@ allprojects {
 }
 ```
 
+## Proguard
+
+If your Android app has proguard enabled, please add the following rules:
+
+```
+-keep class com.smallplanet.** { *; }
+-keep class com.rover.** { *; }
+```
+
 ## SDK Integration
 
 To use Rover in your React Native application:
@@ -145,4 +154,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.1.26
+Latest version: v0.2.0
