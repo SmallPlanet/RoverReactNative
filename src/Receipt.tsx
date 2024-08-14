@@ -121,4 +121,6 @@ export interface Receipt {
     clientInfo?: string
     auxData?: string
     merchantLocalPurchaseDate?: string
+    emlOriginatingDate?: string
+    emlOriginatingDateMerchantLocal?: string
 }

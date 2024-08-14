@@ -1,6 +1,6 @@
 {
   "name": "react-native-rover",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React native wrapper for Rover (https://github.com/SmallPlanet/RoveriOS)",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
