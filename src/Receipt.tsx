@@ -53,6 +53,7 @@ export interface ReceiptAddress {
 }
 
 export interface ReceiptItem {
+    titleOriginal?: string
     title?: string
     titleOther?: Array<String>
     titleAuthors?: Array<String>
@@ -87,8 +88,10 @@ export interface Receipt {
     roverUserId?: string
     roverAccountId?: string
     roverSessionUUID?: string
+    transportId?: string
     duplicationId?: string
     receiptId?: string
+    emailId?: string
     receiptDomain?: string
     receiptFormat?: string
     deviceLocale?: string
@@ -111,6 +114,7 @@ export interface Receipt {
     deliveryCharge?: string
     discounts?: string
     giftCards?: string
+    tip?: string
     currency?: string
     paymentMethod?: string
     paymentChannel?: string
@@ -123,4 +127,7 @@ export interface Receipt {
     merchantLocalPurchaseDate?: string
     emlOriginatingDate?: string
     emlOriginatingDateMerchantLocal?: string
+    emlSubjectKeywords?: Array<String>
+    cancelled?: string
+    preorder?: string
 }
