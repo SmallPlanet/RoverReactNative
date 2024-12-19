@@ -127,6 +127,7 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
     data class Args(var licenseKey: String,
                     var environment: String,
                     var deviceId: String?,
+					var clearAndroidWebStorage: Boolean?,
                     var maxConcurrentCollections: Long?)
 
     val args = RNRJsonAny.parse(argsJson, Args::class.java) ?:
@@ -142,6 +143,7 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
       licenseKey = args.licenseKey,
       environment = roverEnvironment,
       deviceId = args.deviceId ?: "unknown",
+	  clearAndroidWebStorage = args.clearAndroidWebStorage ?: true,
       maxConcurrentCollections = args.maxConcurrentCollections ?: 4,
       context = reactApplicationContext,
       supportFragmentManager = fragmentManager) callback@{ merchants, error ->

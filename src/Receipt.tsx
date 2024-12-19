@@ -120,6 +120,7 @@ export interface Receipt {
     paymentChannel?: string
     shippingAddress?: ReceiptAddress
     merchantAddress?: ReceiptAddress
+    billingAddress?: ReceiptAddress
     items: Array<ReceiptItem>
     sourceData?: string
     clientInfo?: string
@@ -130,4 +131,6 @@ export interface Receipt {
     emlSubjectKeywords?: Array<String>
     cancelled?: string
     preorder?: string
+    returned?: string
+    trackingId?: string
 }
