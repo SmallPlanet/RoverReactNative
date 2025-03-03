@@ -13,6 +13,14 @@
 
 
 
+// dart:
+// dart-ignore: ScrapeRequest
+// dart-ignore: ScrapeStatus
+// dart-ignore: ScrapeServiceGroupStatus
+// dart-ignore: MerchantId
+// dart-ignore: ServiceGroupRequest
+// dart-ignore: MerchantId
+// dart-ignore: InternalMerchantId
 export interface Connection {
     merchantId: number
     account: string
@@ -89,6 +97,7 @@ export interface Receipt {
     roverAccountId?: string
     roverSessionUUID?: string
     transportId?: string
+    emailProviderId?: string
     duplicationId?: string
     receiptId?: string
     emailId?: string
