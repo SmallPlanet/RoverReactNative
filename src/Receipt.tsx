@@ -46,18 +46,38 @@ export interface Merchant {
 // MARK: - ScrapeStatus
 // MARK: ScrapeRequest
 // MARK: - Receipt
+export interface ReceiptFlight {
+    number?: string
+    departureName?: string
+    departureCode?: string
+    arrivalName?: string
+    arrivalCode?: string
+    departureDate?: string
+    arrivalDate?: string
+}
+
+export interface ReceiptAccomodation {
+    agent?: string
+    name?: string
+    address?: ReceiptAddress
+    arrivalDate?: string
+    departureDate?: string
+}
+
 export interface ReceiptFee {
     price?: string
     name?: string
 }
 
 export interface ReceiptAddress {
+    original?: string
     name?: string
     address1?: string
     address2?: string
     city?: string
     state?: string
     zip?: string
+    country?: string
 }
 
 export interface ReceiptItem {
@@ -142,4 +162,6 @@ export interface Receipt {
     preorder?: string
     returned?: string
     trackingId?: string
+    travelFlights?: Array<ReceiptFlight>
+    travelAccomodations?: Array<ReceiptAccomodation>
 }
