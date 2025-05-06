@@ -80,6 +80,17 @@ export interface ReceiptAddress {
     country?: string
 }
 
+export interface ReceiptItemOption {
+    title?: string
+    itemId?: string
+    upc?: string
+    quantity?: string
+    weight?: string
+    itemOptionIndex?: string
+    unitPrice?: string
+    totalPrice?: string
+}
+
 export interface ReceiptItem {
     titleOriginal?: string
     title?: string
@@ -109,6 +120,7 @@ export interface ReceiptItem {
     size?: string
     type?: string
     trackingId?: string
+    itemOptions?: Array<ReceiptItemOption>
 }
 
 export interface Receipt {
