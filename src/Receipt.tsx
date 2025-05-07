@@ -144,6 +144,7 @@ export interface Receipt {
     serviceGroup?: string
     collectedDate?: string
     purchasedDate?: string
+    completedDate?: string
     continuationDate?: string
     membershipInfo?: string
     orderUrl?: string
