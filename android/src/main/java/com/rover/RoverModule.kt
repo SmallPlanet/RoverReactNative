@@ -62,7 +62,7 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
 
     this.nextEventPromise = null
 
-    nextEventPromise.resolve(pendingSend.removeFirst())
+    nextEventPromise.resolve(pendingSend.removeAt(0))
   }
 
   @ReactMethod
