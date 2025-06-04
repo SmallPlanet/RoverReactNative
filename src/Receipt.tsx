@@ -64,6 +64,35 @@ export interface ReceiptAccomodation {
     departureDate?: string
 }
 
+export interface ReceiptCarRental {
+    pickupDate?: string
+    dropoffDate?: string
+    dropoffLocation?: string
+    pickupLocation?: string
+}
+
+export interface ReceiptTrain {
+    departureCity?: string
+    departureState?: string
+    departureStation?: string
+    departureDate?: string
+    arrivalCity?: string
+    arrivalState?: string
+    arrivalStation?: string
+    arrivalDate?: string
+    ticketNumber?: string
+    trainNumber?: string
+}
+
+export interface ReceiptBus {
+    departureDate?: string
+    departureCity?: string
+    departureStation?: string
+    arrivalDate?: string
+    arrivalCity?: string
+    arrivalStation?: string
+}
+
 export interface ReceiptFee {
     price?: string
     name?: string
@@ -177,4 +206,51 @@ export interface Receipt {
     trackingId?: string
     travelFlights?: Array<ReceiptFlight>
     travelAccomodations?: Array<ReceiptAccomodation>
+    travelCarRentals?: Array<ReceiptCarRental>
+    travelTrains?: Array<ReceiptTrain>
+    travelBuses?: Array<ReceiptBus>
+    streamingVideo?: ReceiptStreamingVideo
+}
+
+export interface ReceiptStreamingVideoProfile {
+    id?: string
+    name?: string
+    isKids?: string
+    isMain?: string
+    birthday?: string
+    gender?: string
+    createdDate?: string
+}
+
+export interface ReceiptStreamingVideoExtraValue {
+    service?: string
+    key?: string
+    value?: string
+}
+
+export interface ReceiptStreamingVideo {
+    profile?: ReceiptStreamingVideoProfile
+    extraValues?: Array<ReceiptStreamingVideoExtraValue>
+    seriesTitle?: string
+    seriesAsin?: string
+    seriesId?: string
+    seriesDescription?: string
+    seriesUrl?: string
+    seriesImage?: string
+    seasonTitle?: string
+    seasonAsin?: string
+    seasonId?: string
+    seasonDescription?: string
+    seasonUrl?: string
+    seasonImage?: string
+    videoTitle?: string
+    videoAsin?: string
+    videoId?: string
+    videoDescription?: string
+    videoUrl?: string
+    videoImage?: string
+    videoLengthSeconds?: string
+    videoWatchedSeconds?: string
+    viewDate?: string
+    videoType?: string
 }
