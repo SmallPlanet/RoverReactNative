@@ -1,10 +1,45 @@
 import RoveriOS
 import Foundation
 import React
+import os.log
 
 @objc(NativeRover)
 class NativeRover: NSObject {
+    private static var pendingGlobalSend: [String] = []
+    private static var pendingGlobalSendLock = NSLock()
+    private static var pendingGlobalSendDidUpdate: () -> () = { }
     
+    @objc(initBackgroundCollection:)
+    static func initBackgroundCollection(timeInterval: TimeInterval) {
+        Rover.shared.scheduleBackgroundCollections(interval: timeInterval,
+                                                   collectionWillStart: { taskIdentifier in
+            struct Args: Codable {
+                var taskIdentifier: String
+            }
+            let args = Args(taskIdentifier: taskIdentifier)
+            guard let argsJson = try? args.json() else { return }
+            pendingGlobalSendLock.lock()
+            NativeRover.pendingGlobalSend.append(argsJson)
+            pendingGlobalSendLock.unlock()
+            
+            pendingGlobalSendDidUpdate()
+        },
+                                                   collectionWillFinish: { taskIdentifier, connections in
+            struct Args: Codable {
+                var taskIdentifier: String
+                var connections: [RoveriOS.Connection]
+            }
+            let args = Args(taskIdentifier: taskIdentifier,
+                            connections: connections)
+            guard let argsJson = try? args.json() else { return }
+            pendingGlobalSendLock.lock()
+            NativeRover.pendingGlobalSend.append(argsJson)
+            pendingGlobalSendLock.unlock()
+            
+            pendingGlobalSendDidUpdate()
+        })
+    }
+        
     private var delegates: [String: JSRoverDelegate] = [:]
     
     private var nextEventResolveBlock: RCTPromiseResolveBlock?
@@ -12,6 +47,10 @@ class NativeRover: NSObject {
     
     private var pendingSend: [String] = []
     private var pendingResults: [String: (String?, String?) -> ()] = [:]
+    
+    override init() {
+        super.init()
+    }
     
     func remove(delegateUUID: String) {
         delegates[delegateUUID] = nil
@@ -101,7 +140,37 @@ class NativeRover: NSObject {
     ) {
         resolve(Rover.shared.version)
     }
+    
+    @objc(syslog:withResolver:withRejecter:)
+    func syslog(
+        message: String,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        os_log("ROVER: %{public}@", message)
+        resolve(message)
+    }
 
+    @objc(didScheduleBackgroundCollections:withRejecter:)
+    func didScheduleBackgroundCollections(
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        NativeRover.pendingGlobalSendDidUpdate = {
+            NativeRover.pendingGlobalSendLock.lock()
+            for event in NativeRover.pendingGlobalSend {
+                self.pendingSend.append(event)
+            }
+            NativeRover.pendingGlobalSend = []
+            NativeRover.pendingGlobalSendLock.unlock()
+            self.checkSendQueue()
+        }
+        
+        NativeRover.pendingGlobalSendDidUpdate()
+        
+        resolve("")
+    }
+    
     @objc(configure:withResolver:withRejecter:)
     func configure(
         argsJson: String,

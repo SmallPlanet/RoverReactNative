@@ -27,6 +27,8 @@ export interface Connection {
     password?: string
     cookiesBase64?: string
     fromDate?: Date
+    collectedDate?: Date
+    attemptedDate?: Date
     appInfo?: string
     featureFlags?: Array<String>
     userInteractionRequired: boolean
@@ -183,6 +185,8 @@ export interface Receipt {
     total?: string
     totalWithoutTax?: string
     deliveryCharge?: string
+    deliveryDistance?: string
+    deliveryDuration?: string
     discounts?: string
     giftCards?: string
     tip?: string
@@ -191,6 +195,7 @@ export interface Receipt {
     paymentChannel?: string
     shippingAddress?: ReceiptAddress
     merchantAddress?: ReceiptAddress
+    merchantLocationType?: string
     billingAddress?: ReceiptAddress
     items: Array<ReceiptItem>
     sourceData?: string

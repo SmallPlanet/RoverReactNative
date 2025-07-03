@@ -84,7 +84,7 @@ Rover.connections().then(function(connections) {
 let delegate = MyRoverDelegate();
 Rover.collect({
     account: connection.account,
-    merchantId: merchantId,
+    merchantId: connection.merchantId,
     fromDate: connection.fromDate,
     collectItemInfo: true,
     isEphemeral: false,
@@ -105,7 +105,109 @@ Rover.remove({
 
 ```
 
-## Android
+## Background Collection
+
+[Rover iOS](https://github.com/SmallPlanet/RoveriOS) supports BGProcessingTask and [Rover Android](https://github.com/SmallPlanet/RoverAndroid) supports WorkManager for performing periodic collections without user interaction.
+
+- In your App.tsx code you will add the logic for which connections to collect from when the time for periodic collection happens. This code should be run at the global level, such that Rover.scheduleBackgroundCollections is run when your application's JS is first loaded.
+
+```javascript
+// Note: the callbacks provided to Rover.scheduleBackgroundCollections may be called during times
+// where there is no application UI present (when the application is relaunched in the background
+// on Android, for example). The code in Rover.scheduleBackgroundCollections() should be written
+// in such a way that it does not rely on your UI.
+Rover.scheduleBackgroundCollections(
+    (taskIdentifier) => {
+        // When the time comes to collect in the background this code will run.
+        // You should call Rover.collect() for the connections you would like to refresh.
+        // This allows you to implement custom logic to fit your business needs (for example, 
+        // if one connection is higher priority than another or needs to be refreshed more
+        // often than another). Note that the amount of time allowed to collections is
+        // typically limited to a few minutes.
+
+        // Be certain to call Rover.configure() here as there is no garauntee it will
+        // be run elsewhere when running from the background.
+        Rover.configure({
+            licenseKey: "MY_ROVER_LICENSE_KEY",
+            environment: Rover.ROVER_STAGING,
+        }).then((_) => {
+            Rover.connections().then((connections) => {
+                for (let connection of connections) {
+
+                    let collectionArgs = {
+                        userId: undefined,
+                        account: connection.account,
+                        merchantId: connection.merchantId,
+                        fromDate: connection.fromDate ?? new Date('2023-01-01T00:00:00Z'),
+                        isEphemeral: false,
+                        allowUserInteractionRequired: false
+                    };
+                    
+                    let delegate = new MyRoverBackgroundDelegate();
+                    Rover.collect(collectionArgs, delegate).then(() => {
+                        console.log(`background collection scheduled for [${connection.merchantId}] ${connection.account}`);
+                    }).catch(function(error) {
+                        Rover.syslog(error);
+                    });
+                }
+            }).catch(function(error) {
+                Rover.syslog(error);
+            });
+        });
+    },
+    (taskIdentifier, connections) => {
+        console.log(`background collection finished for ${connections.length} connections`);
+    }
+);
+```
+
+### iOS
+
+- Follow the instructions on [Rover iOS](https://github.com/SmallPlanet/RoveriOS) for enabling background capabilities and adding **com.smallplanet.rover.processing** to your Info.plist.
+- Add the initialization call to your iOS AppDelegate's didFinishLaunchingWithOptions callback.
+
+```
+#import <react-native-rover/NativeRover-Bridging-Header.h>
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  self.moduleName = @"RoverExample";
+  self.initialProps = @{};
+  
+  // Add this call to initilize periodic background collection every 24 hours
+  [NativeRover initBackgroundCollection: 60 * 60 * 24];
+
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+```
+
+### Android
+
+- Create a Worker class in which you will call RoverModule.scheduleBackgroundCollections()
+- Schedule your Worker class for periodic work via WorkManager API
+
+```
+// In your MainApplication.onCreate(), use the WorkManager API to schedule periodic background collections
+val manager = WorkManager.getInstance(this.applicationContext)
+val constraints = Constraints.Builder()
+  .setRequiredNetworkType(NetworkType.CONNECTED)
+  .setRequiresBatteryNotLow(true)
+  .build()
+val request = PeriodicWorkRequestBuilder<BackgroundCollectionWorker>(24, TimeUnit.HOURS)
+  .setConstraints(constraints)
+  .build()
+manager.enqueueUniquePeriodicWork("BackgroundCollectionWorker", ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, request)
+
+// BackgroundCollectionWorker subclass to use with WorkManager API; call RoverModule.scheduleBackgroundCollections(context)
+class BackgroundCollectionWorker(val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+  override suspend fun doWork(): Result {
+    return RoverModule.scheduleBackgroundCollections(context)
+  }
+}
+```
+
+
+## Android Setup
 
 In your Android project, please add the following overrides to a custom subclass of Application.
 
@@ -154,4 +256,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.2.10
+Latest version: v0.2.11

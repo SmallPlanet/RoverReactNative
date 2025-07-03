@@ -38,6 +38,8 @@ let dateConverter = function(this: any, key: string, value: any) {
 }
 
 let delegates: { [key: string]: RoverDelegate } = {};
+let _collectionWillStart: (taskIdentifier: String) => void = () => { };
+let _collectionWillFinish: (taskIdentifier: String, connections: Array<Connection>) => void = () => { };
 
 class RoverClass {
     ROVER_STAGING = "ROVER_STAGING";
@@ -63,6 +65,34 @@ class RoverClass {
 
     version(): Promise<object> {
         return NativeRover.version()
+    }
+
+    syslog(message: String): Promise<object> {
+        return new Promise((resolve, reject) => {
+            NativeRover.syslog(
+                message
+            ).then(function() {
+                resolve(message);
+            }).catch(function(error: any) {
+                reject(error);
+            });
+        });
+    }
+
+    /**
+     * To perform periodic collections you need to:
+     * 1. follow the native platform specific instructions in the readme
+     * 2. call this method to provide functions to run when background collection is ready
+     *    to start and when background collection is finished.
+     */
+    scheduleBackgroundCollections(
+        collectionWillStart: (taskIdentifier: String) => void,
+        collectionWillFinish: (taskIdentifier: String, connections: Array<Connection>) => void
+    ) {
+        _collectionWillStart = collectionWillStart;
+        _collectionWillFinish = collectionWillFinish;
+
+        NativeRover.didScheduleBackgroundCollections()
     }
     
     /**
@@ -288,6 +318,15 @@ function nextEvent(eventJson?: string) {
     if (eventJson != undefined) {
         try {
             let event = JSON.parse(eventJson);
+
+            if (event.taskIdentifier) {
+                if (event.connections) {
+                    _collectionWillFinish(event.taskIdentifier, event.connections);
+                } else {
+                    _collectionWillStart(event.taskIdentifier);
+                }
+            }
+
             let delegateUUID = event.delegateUUID;
             let delegateFunc: string = event.delegateFunc;
             let delegate = delegates[delegateUUID];

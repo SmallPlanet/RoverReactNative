@@ -1,5 +1,6 @@
 package com.rover
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.facebook.react.bridge.Callback
@@ -12,8 +13,16 @@ import com.smallplanet.roverandroid.Private.ScrapeResponse
 import com.smallplanet.roverandroid.Rover
 import com.smallplanet.roverandroid.WebViews.RoverWebView
 import android.content.pm.PackageManager
+import android.util.Log
+import androidx.work.ListenableWorker
+import com.facebook.react.ReactApplication
+import com.facebook.react.ReactInstanceManager
+import com.facebook.react.bridge.ReactContext
+import com.smallplanet.roverandroid.Connection
 import java.util.Date
 import java.util.UUID
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 public class RoverModule(private val reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -117,17 +126,42 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun syslog(
+    message: String,
+    promise: Promise
+  ) {
+    Log.e("ROVER", "ROVER: " + message)
+    promise.resolve(message)
+  }
+
+  @ReactMethod
+  fun didScheduleBackgroundCollections(
+    promise: Promise
+  ) {
+    pendingGlobalSendDidUpdate = {
+      synchronized(pendingGlobalSend) {
+        for (event in pendingGlobalSend) {
+          pendingSend.add(event)
+        }
+        pendingGlobalSend = mutableListOf()
+      }
+      checkSendQueue()
+    }
+    pendingGlobalSendDidUpdate()
+    promise.resolve("")
+  }
+
+  @ReactMethod
   fun configure(
     argsJson: String,
     promise: Promise
   ) {
-    val fragmentManager = getFragmentManager() ?:
-    return promise.reject("ERROR", "Fragment manager not found")
+    val fragmentManager = getFragmentManager()
 
     data class Args(var licenseKey: String,
                     var environment: String,
                     var deviceId: String?,
-					var clearAndroidWebStorage: Boolean?,
+					          var clearAndroidWebStorage: Boolean?,
                     var maxConcurrentCollections: Long?)
 
     val args = RNRJsonAny.parse(argsJson, Args::class.java) ?:
@@ -349,6 +383,56 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
     public fun getPackageManager(appPackageName: String,
                           appPackageManager: PackageManager): PackageManager? {
       return Rover.getPackageManager(appPackageName, appPackageManager)
+    }
+
+    internal var pendingGlobalSend = mutableListOf<String>()
+    internal var pendingGlobalSendDidUpdate:() -> Unit = { }
+
+    suspend fun scheduleBackgroundCollections(context: Context): ListenableWorker.Result {
+      // ensure ReactNative JS is started, then call the RoverBackgroundInit
+      // Log.e("ROVER", "Rover createReactContextInBackground")
+      val application = context.applicationContext as ReactApplication
+      val reactNativeHost = application.reactNativeHost
+      val reactInstanceManager = reactNativeHost.reactInstanceManager
+
+      // wait for the JS to finish starting
+      if (reactInstanceManager.currentReactContext == null) {
+        val latch = CountDownLatch(1)
+        reactInstanceManager.addReactInstanceEventListener(object :
+          ReactInstanceManager.ReactInstanceEventListener {
+          override fun onReactContextInitialized(ctx: ReactContext) {
+            reactInstanceManager.removeReactInstanceEventListener(this)
+            latch.countDown()
+          }
+        })
+        reactInstanceManager.createReactContextInBackground()
+        // Log.e("ROVER", "Rover waiting for JS to start")
+        latch.await(30, TimeUnit.SECONDS)
+      }
+
+      // Log.e("ROVER", "Rover scheduleBackgroundCollections")
+      return Rover.scheduleBackgroundCollections(collectionWillStart@{
+        data class Args(
+          var taskIdentifier: String,
+        )
+        val args = Args("com.smallplanet.rover.processing")
+        val argsJson = RNRJsonAny.toJson(args) ?: return@collectionWillStart
+        synchronized(pendingGlobalSend) {
+          pendingGlobalSend.add(argsJson)
+        }
+        pendingGlobalSendDidUpdate()
+      }, collectionWillFinish@{ connections ->
+        data class Args(
+          var taskIdentifier: String,
+          var connections: MutableList<Connection>
+        )
+        val args = Args("com.smallplanet.rover.processing", connections)
+        val argsJson = RNRJsonAny.toJson(args) ?: return@collectionWillFinish
+        synchronized(pendingGlobalSend) {
+          pendingGlobalSend.add(argsJson)
+        }
+        pendingGlobalSendDidUpdate()
+      })
     }
   }
 }
