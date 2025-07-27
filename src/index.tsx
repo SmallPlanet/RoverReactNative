@@ -70,7 +70,7 @@ class RoverClass {
     syslog(message: String): Promise<object> {
         return new Promise((resolve, reject) => {
             NativeRover.syslog(
-                message
+                message.toString()
             ).then(function() {
                 resolve(message);
             }).catch(function(error: any) {

@@ -215,6 +215,7 @@ export interface Receipt {
     travelTrains?: Array<ReceiptTrain>
     travelBuses?: Array<ReceiptBus>
     streamingVideo?: ReceiptStreamingVideo
+    aiConversation?: ReceiptAIConversation
 }
 
 export interface ReceiptStreamingVideoProfile {
@@ -257,5 +258,68 @@ export interface ReceiptStreamingVideo {
     videoLengthSeconds?: string
     videoWatchedSeconds?: string
     viewDate?: string
+    estimatedViewDate?: string
     videoType?: string
+}
+
+export interface ReceiptAIConversationMessagePart {
+    imageId?: string
+    imageWidth?: string
+    imageHeight?: string
+    imageGenerator?: string
+    text?: string
+}
+
+export interface ReceiptAIConversationSearchResult {
+    domain?: string
+    type?: string
+    url?: string
+    title?: string
+    snippet?: string
+    publishedDate?: string
+    attribution?: string
+}
+
+export interface ReceiptAIConversationContentReference {
+    replaceText?: string
+    altText?: string
+    type?: string
+    website?: ReceiptAIConversationSearchResult
+}
+
+export interface ReceiptAIConversationAttachment {
+    imageId?: string
+    imageWidth?: string
+    imageHeight?: string
+    imageType?: string
+    imageName?: string
+}
+
+export interface ReceiptAIConversationMessage {
+    continuousSessionUUID?: string
+    messageId?: string
+    author?: string
+    createdDate?: string
+    updatedDate?: string
+    contentType?: string
+    messageParts?: Array<ReceiptAIConversationMessagePart>
+    attachments?: Array<ReceiptAIConversationAttachment>
+    contentReferences?: Array<ReceiptAIConversationContentReference>
+    searchResults?: Array<ReceiptAIConversationSearchResult>
+    model?: string
+    codeLanguage?: string
+    codeText?: string
+    visibility?: string
+}
+
+export interface ReceiptAIConversation {
+    userId?: string
+    userName?: string
+    userEmail?: string
+    userCreatedDate?: string
+    conversationId?: string
+    title?: string
+    createdDate?: string
+    updatedDate?: string
+    messages?: Array<ReceiptAIConversationMessage>
 }

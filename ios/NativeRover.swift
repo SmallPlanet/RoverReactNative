@@ -5,6 +5,7 @@ import os.log
 
 @objc(NativeRover)
 class NativeRover: NSObject {
+    private static var shared: NativeRover? = nil
     private static var pendingGlobalSend: [String] = []
     private static var pendingGlobalSendLock = NSLock()
     private static var pendingGlobalSendDidUpdate: () -> () = { }
@@ -49,7 +50,9 @@ class NativeRover: NSObject {
     private var pendingResults: [String: (String?, String?) -> ()] = [:]
     
     override init() {
-        super.init()
+      super.init()
+      
+      NativeRover.shared = self
     }
     
     func remove(delegateUUID: String) {
