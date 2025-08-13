@@ -156,6 +156,7 @@ export interface ReceiptItem {
 
 export interface Receipt {
     roverMerchantId?: number
+    roverMerchantVersion?: number
     roverUserId?: string
     roverAccountId?: string
     roverSessionUUID?: string
@@ -228,15 +229,9 @@ export interface ReceiptStreamingVideoProfile {
     createdDate?: string
 }
 
-export interface ReceiptStreamingVideoExtraValue {
-    service?: string
-    key?: string
-    value?: string
-}
-
 export interface ReceiptStreamingVideo {
     profile?: ReceiptStreamingVideoProfile
-    extraValues?: Array<ReceiptStreamingVideoExtraValue>
+    extraValues?: Record<string, string>
     seriesTitle?: string
     seriesAsin?: string
     seriesId?: string
