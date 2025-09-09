@@ -177,8 +177,9 @@ public class RoverModule(private val reactContext: ReactApplicationContext) :
       licenseKey = args.licenseKey,
       environment = roverEnvironment,
       deviceId = args.deviceId ?: "unknown",
-	  clearAndroidWebStorage = args.clearAndroidWebStorage ?: true,
+      clearAndroidWebStorage = args.clearAndroidWebStorage ?: true,
       maxConcurrentCollections = args.maxConcurrentCollections ?: 4,
+      suppressVersionNotice = false,
       context = reactApplicationContext,
       supportFragmentManager = fragmentManager) callback@{ merchants, error ->
       if (error != null) {

@@ -196,7 +196,8 @@ class NativeRover: NSObject {
         Rover.shared.configure(licenseKey: args.licenseKey,
                                environment: roverEnvironment,
                                deviceId: args.deviceId ?? "unknown",
-                               maxConcurrentCollections: args.maxConcurrentCollections ?? 4) { merchants, error in
+                               maxConcurrentCollections: args.maxConcurrentCollections ?? 4,
+                               suppressVersionNotice: false) { merchants, error in
             if let error = error {
                 return reject("ERROR", error, nil)
             }
