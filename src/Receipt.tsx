@@ -47,6 +47,21 @@ export interface Merchant {
 
 // MARK: - ScrapeStatus
 // MARK: ScrapeRequest
+export interface RoverServerEdgeConfig {
+    authorization?: string
+    listenAddress?: string
+    listenPort?: number
+    routeAddress?: string
+    routePort?: number
+    requestsUrl?: string
+    resultsUrl: string
+    receiptsUrl?: string
+    statusUrl?: string
+    debug: boolean
+    verboseErrors: boolean
+    permissiveResponses: boolean
+}
+
 // MARK: - Receipt
 export interface ReceiptFlight {
     number?: string

@@ -232,6 +232,7 @@ class NativeRover: NSObject {
             var collectItemInfo: Bool?
             var collectSourceData: Bool?
             var isEphemeral: Bool?
+            var isConnectionOnly: Bool?,
             var hasBackend: Bool?
             var allowUserInteractionRequired: Bool?
             var appInfo: String?
@@ -272,6 +273,7 @@ class NativeRover: NSObject {
                              collectItemInfo: args.collectItemInfo ?? false,
                              collectSourceData: args.collectSourceData ?? false,
                              isEphemeral: args.isEphemeral ?? false,
+                             isConnectionOnly: args.isConnectionOnly ?? false,
                              hasBackend: args.hasBackend ?? false,
                              allowUserInteractionRequired: args.allowUserInteractionRequired ?? true,
                              appInfo: args.appInfo,

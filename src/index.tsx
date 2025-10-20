@@ -159,6 +159,7 @@ class RoverClass {
      * collectItemInfo: (optional) instruct Rover to collect detailed item info. "Item info" is specific to each merchant. Collecting item info can negatively impact collection times and is disabled by default.
      * collectSourceData: (optional) instruct Rover to return the sourceData used to create the normalized data. This is typically JSON specific to each merchant. Source data can increase data payloads and is disabled by default.
      * isEphemeral: (default false) If false then a encrypted connection data will be stored to this device. This connection can then be reused in the future to re-collect from the same account.
+     * isConnectionOnly: (default false) Perform only connection activities, no collection activities.
      * hasBackend: (default false) For simple integrations Rover will perform all of the collection locally. More advanced integrations might want to integrate with server-side services to store collection state at various points in the collection process. Set to true to enable the various roverPull/roverPush delegate callbacks.
      * allowUserInteractionRequired (default true) Collection might encounter an error for which the user needs to resolve (for example, signing in). If allowUserInteractionRequired is enabled then Rover will automatically display a modal for the user to interact with. If you want Rover to collect solely in the background, then set this value to false.
      * appInfo: (optional) application specific info for this specific merchant. If this is unknown then leave as nil.
@@ -184,6 +185,7 @@ class RoverClass {
         collectItemInfo?: boolean,
         collectSourceData?: boolean,
         isEphemeral?: boolean,
+        isConnectionOnly?: boolean,
         hasBackend?: boolean,
         allowUserInteractionRequired?: boolean,
         appInfo?: string,
