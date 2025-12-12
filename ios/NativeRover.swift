@@ -232,7 +232,7 @@ class NativeRover: NSObject {
             var collectItemInfo: Bool?
             var collectSourceData: Bool?
             var isEphemeral: Bool?
-            var isConnectionOnly: Bool?,
+            var isConnectionOnly: Bool?
             var hasBackend: Bool?
             var allowUserInteractionRequired: Bool?
             var appInfo: String?

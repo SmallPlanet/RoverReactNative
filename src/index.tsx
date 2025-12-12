@@ -383,6 +383,7 @@ function nextEvent(eventJson?: string) {
                         event.newAccount,
                         event.password,
                         event.cookiesBase64,
+                        event.wasUserInteractionRequired,
                         function(error?: string, appInfo?: string) {
                             NativeRover.sendResult(delegate?.uuid, appInfo, error);
                         }
@@ -419,6 +420,7 @@ export class RoverDelegate {
         _newAccount: string, 
         _password: string, 
         _cookiesBase64: string, 
+        _wasUserInteractionRequired: boolean,
         callback: ((error?: string, appInfo?: string) => void)
     ) {
         callback(undefined, undefined);

@@ -128,6 +128,7 @@ class JSRoverDelegate: RoverDelegate {
                                        newAccount: String,
                                        password: String,
                                        cookiesBase64: String?,
+                                       wasUserInteractionRequired: Bool,
                                        callback: @escaping (_ error: String?, _ appInfo: String?) -> ()) {
         struct Args: Codable {
             let delegateUUID: String
@@ -137,6 +138,7 @@ class JSRoverDelegate: RoverDelegate {
             let newAccount: String
             let password: String
             let cookiesBase64: String?
+            let wasUserInteractionRequired: Bool
         }
         let args = Args(delegateUUID: uuid,
                         delegateFunc: "roverAccountDidLogin",
@@ -144,7 +146,8 @@ class JSRoverDelegate: RoverDelegate {
                         oldAccount: oldAccount,
                         newAccount: newAccount,
                         password: password,
-                        cookiesBase64: cookiesBase64)
+                        cookiesBase64: cookiesBase64,
+                        wasUserInteractionRequired: wasUserInteractionRequired)
         
         guard let argsJson = try? args.json() else {
             return callback("failed to serialize args", nil)

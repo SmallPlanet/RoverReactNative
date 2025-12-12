@@ -132,6 +132,7 @@ class JSRoverDelegate(
                                   newAccount: String,
                                   password: String,
                                   cookiesBase64: String?,
+                                  wasUserInteractionRequired: Boolean,
                                   callback: (String?, String?) -> Unit) {
     data class Args(
       val delegateUUID: String,
@@ -140,7 +141,8 @@ class JSRoverDelegate(
       val oldAccount: String,
       val newAccount: String,
       val password: String,
-      val cookiesBase64 : String?
+      val cookiesBase64 : String?,
+      val wasUserInteractionRequired: Boolean
     )
     val args = Args(
       delegateUUID = uuid,
@@ -149,7 +151,8 @@ class JSRoverDelegate(
       oldAccount = oldAccount,
       newAccount = newAccount,
       password = password,
-      cookiesBase64 = cookiesBase64
+      cookiesBase64 = cookiesBase64,
+      wasUserInteractionRequired = wasUserInteractionRequired
     )
 
     val argsJson = RNRJsonAny.toJson(args) ?:
