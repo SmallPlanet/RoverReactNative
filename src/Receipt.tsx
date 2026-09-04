@@ -60,6 +60,25 @@ export interface RoverServerEdgeConfig {
     debug: boolean
     verboseErrors: boolean
     permissiveResponses: boolean
+    intelligenceModelFlag?: string
+    userAgentTags: Array<String>
+    proxy?: string
+}
+
+// MARK: - Wildfire
+export interface WildfireMerchant {
+    id: number
+    name: string
+    score: number
+    url: string
+    domain: string
+    logo?: string
+    logoRect?: string
+    logoTransparent?: string
+    logoFeatured?: string
+    maxRateKind: string
+    maxRateAmount: string
+    maxRateCurrency?: string
 }
 
 // MARK: - Receipt
@@ -211,6 +230,7 @@ export interface Receipt {
     paymentChannel?: string
     shippingAddress?: ReceiptAddress
     merchantAddress?: ReceiptAddress
+    merchantStoreId?: string
     merchantLocationType?: string
     billingAddress?: ReceiptAddress
     items: Array<ReceiptItem>
@@ -232,6 +252,7 @@ export interface Receipt {
     travelBuses?: Array<ReceiptBus>
     streamingVideo?: ReceiptStreamingVideo
     aiConversation?: ReceiptAIConversation
+    advertisement?: ReceiptAdvertisement
 }
 
 export interface ReceiptStreamingVideoProfile {
@@ -245,6 +266,8 @@ export interface ReceiptStreamingVideoProfile {
 }
 
 export interface ReceiptStreamingVideo {
+    accountId?: string
+    membershipType?: string
     profile?: ReceiptStreamingVideoProfile
     extraValues?: Record<string, string>
     seriesTitle?: string
@@ -265,11 +288,16 @@ export interface ReceiptStreamingVideo {
     videoDescription?: string
     videoUrl?: string
     videoImage?: string
+    videoEpisodeNumber?: string
     videoLengthSeconds?: string
     videoWatchedSeconds?: string
     viewDate?: string
     estimatedViewDate?: string
     videoType?: string
+    channelTitle?: string
+    channelUrl?: string
+    originatingDevice?: string
+    estimatedOriginatingDevice?: string
 }
 
 export interface ReceiptAIConversationMessagePart {
@@ -331,5 +359,26 @@ export interface ReceiptAIConversation {
     title?: string
     createdDate?: string
     updatedDate?: string
+    groupId?: string
+    groupType?: string
+    groupTitle?: string
     messages?: Array<ReceiptAIConversationMessage>
+}
+
+export interface ReceiptAdvertisement {
+    id?: string
+    date?: string
+    type?: string
+    title?: string
+    description?: string
+    brand?: string
+    brandUrl?: string
+    brandId?: string
+    image?: string
+    url?: string
+    action?: string
+    associatedContentType?: string
+    associatedContentId?: string
+    originatingDevice?: string
+    estimatedOriginatingDevice?: string
 }

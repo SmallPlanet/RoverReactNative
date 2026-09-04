@@ -229,12 +229,21 @@ class ReferenceApplication(): Application() {
 	}
 }
 ```
+
 In your project ```build.gradle``` file, add the following repository:
 ```
 allprojects {
     repositories {
         flatDir { dirs "$rootDir/../node_modules/react-native-rover/android/libs" }
     }
+}
+```
+
+If you Android project lists a dependency for **androidx.webkit:webkit** please ensure it is version ** 1.14.0** or higher.
+```kotlin
+dependencies {
+	// Rover supports features added in 1.14.0 and above; please ensure you specify at least this version of androidx.webkit
+	implementation 'androidx.webkit:webkit:1.14.0'
 }
 ```
 
@@ -257,4 +266,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.2.17
+Latest version: v0.2.18
