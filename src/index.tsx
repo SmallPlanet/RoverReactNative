@@ -363,6 +363,13 @@ function nextEvent(eventJson?: string) {
                     );
                     NativeRover.sendResult(delegate?.uuid, undefined, undefined);
                     break;
+                case "roverAnalyticsEvent":
+                    delegate.roverAnalyticsEvent(
+                        event.name,
+                        event.parameters
+                    );
+                    NativeRover.sendResult(delegate?.uuid, undefined, undefined);
+                    break;
                 case "roverHasStatus":
                     delegate.roverHasStatus(
                         event.sessionUUID,
@@ -389,7 +396,16 @@ function nextEvent(eventJson?: string) {
                         }
                     );
                     break;
+                case "roverIMAPDidConnect":
+                    delegate.roverIMAPDidConnect(
+                        event.sessionUUID,
+                        event.account,
+                        event.appPassword
+                    );
+                    NativeRover.sendResult(delegate?.uuid, undefined, undefined);
+                    break;
                 }
+                
             }
         } catch(e: any) {
             console.log("Rover delegate error: " + e.message);
@@ -424,6 +440,21 @@ export class RoverDelegate {
         callback: ((error?: string, appInfo?: string) => void)
     ) {
         callback(undefined, undefined);
+    }
+    
+    roverIMAPDidConnect(
+        _sessionUUID: string, 
+        _account: string, 
+        _appPassword: string
+    ) {
+        
+    }
+    
+    roverAnalyticsEvent(
+        _name: string, 
+        _parameters: Map<string, string>
+    ) {
+        
     }
     
     roverHasStatus(

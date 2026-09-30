@@ -83,6 +83,26 @@ class JSRoverDelegate: RoverDelegate {
         
         nativeRover.send(uuid, argsJson) { args, error in }
     }
+    
+    override func roverAnalyticsEvent(name: String,
+                                     parameters: [String: String]) {
+        struct Args: Codable {
+            let delegateUUID: String
+            let delegateFunc: String
+            let name: String
+            let parameters: [String: String]
+        }
+        let args = Args(delegateUUID: uuid,
+                        delegateFunc: "roverAnalyticsEvent",
+                        name: name,
+                        parameters: parameters)
+        
+        guard let argsJson = try? args.json() else {
+            return
+        }
+        
+        nativeRover.send(uuid, argsJson) { args, error in }
+    }
 
     override func roverHasStatus(sessionUUID: String,
                                  progress: Double,
@@ -156,5 +176,28 @@ class JSRoverDelegate: RoverDelegate {
         nativeRover.send(uuid, argsJson) { args, error in
             callback(error, args)
         }
+    }
+    
+    override func roverIMAPDidConnect(sessionUUID: String,
+                                      account: String,
+                                      appPassword: String) {
+        struct Args: Codable {
+            let delegateUUID: String
+            let delegateFunc: String
+            let sessionUUID: String
+            let account: String
+            let appPassword: String
+        }
+        let args = Args(delegateUUID: uuid,
+                        delegateFunc: "roverIMAPDidConnect",
+                        sessionUUID: sessionUUID,
+                        account: account,
+                        appPassword: appPassword)
+        
+        guard let argsJson = try? args.json() else {
+            return
+        }
+        
+        nativeRover.send(uuid, argsJson) { args, error in }
     }
 }

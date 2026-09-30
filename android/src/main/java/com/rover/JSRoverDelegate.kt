@@ -87,6 +87,26 @@ class JSRoverDelegate(
 
     nativeRover.send(uuid, argsJson) { resultJson, resultError -> }
   }
+  
+  override fun roverAnalyticsEvent(name: String,
+                              parameters: MutableMap<String, String>) {
+    data class Args (
+      val delegateUUID: String,
+      val delegateFunc: String,
+      val name: String,
+      val parameters: MutableMap<String, String>
+    )
+    val args = Args(
+      delegateUUID = uuid,
+      delegateFunc = "roverAnalyticsEvent",
+      name = name,
+      parameters = parameters
+    )
+
+    val argsJson = RNRJsonAny.toJson(args) ?:  return
+
+    nativeRover.send(uuid, argsJson) { resultJson, resultError -> }
+  }
 
   override fun roverHasStatus(sessionUUID: String,
                               progress: Double,
@@ -161,6 +181,29 @@ class JSRoverDelegate(
     nativeRover.send(uuid, argsJson) { resultJson, resultError ->
       callback(resultError, resultJson)
     }
+  }
+  
+  override fun roverIMAPDidConnect(sessionUUID: String,
+                              account: String,
+                              appPassword: String) {
+    data class Args (
+      val delegateUUID: String,
+      val delegateFunc: String,
+      val sessionUUID: String,
+      val account: String,
+      val appPassword: String
+    )
+    val args = Args(
+      delegateUUID = uuid,
+      delegateFunc = "roverIMAPDidConnect",
+      sessionUUID = sessionUUID,
+      account = account,
+      appPassword = appPassword
+    )
+
+    val argsJson = RNRJsonAny.toJson(args) ?:  return
+
+    nativeRover.send(uuid, argsJson) { resultJson, resultError -> }
   }
 
 }

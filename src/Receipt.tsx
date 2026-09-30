@@ -81,6 +81,14 @@ export interface WildfireMerchant {
     maxRateCurrency?: string
 }
 
+export interface WildfireCoupon {
+    id: number
+    merchantId: number
+    description: string
+    exclusions: string
+    code: string
+}
+
 // MARK: - Receipt
 export interface ReceiptFlight {
     number?: string
