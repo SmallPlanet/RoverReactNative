@@ -231,6 +231,7 @@ export interface Receipt {
     deliveryDistance?: string
     deliveryDuration?: string
     discounts?: string
+    credits?: string
     giftCards?: string
     tip?: string
     currency?: string
@@ -314,6 +315,9 @@ export interface ReceiptAIConversationMessagePart {
     imageHeight?: string
     imageGenerator?: string
     text?: string
+    context0?: string
+    context1?: string
+    context2?: string
 }
 
 export interface ReceiptAIConversationSearchResult {
