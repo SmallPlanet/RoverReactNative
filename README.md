@@ -207,6 +207,14 @@ class BackgroundCollectionWorker(val context: Context, params: WorkerParameters)
 }
 ```
 
+## iOS Setup
+
+On Dec 2 2026 CocoaPods trunk is being made read only. To help bridge the gap as we transition from CocoaPods to Swift Package Manager we are publishing Rover iOS on our own CocoaPods spec repo. Add these lines to the top of your `ios/Podfile`:
+
+```ruby
+source 'https://github.com/SmallPlanet/RoverPods.git'
+source 'https://cdn.cocoapods.org/'
+```
 
 ## Android Setup
 
