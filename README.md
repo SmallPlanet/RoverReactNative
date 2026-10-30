@@ -274,4 +274,4 @@ npm install react-native-rover
 
 
 
-Latest version: v0.2.21
+Latest version: v0.2.22
